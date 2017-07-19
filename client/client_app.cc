@@ -11,6 +11,8 @@
 #include "include/wrapper/cef_helpers.h"
 #include <fstream>
 
+extern int start_lol_handler();
+
 ClientApp::ClientApp() {
 }
 
@@ -63,6 +65,11 @@ void ClientApp::OnContextCreated(
 	window->SetValue(L"GetValue", func2, V8_PROPERTY_ATTRIBUTE_NONE);
 	CefRefPtr<CefV8Value> func3 = CefV8Value::CreateFunction(L"Minimize", cbHandler);
 	window->SetValue(L"Minimize", func3, V8_PROPERTY_ATTRIBUTE_NONE);
+
+// 	//init lol handler  (执行该代码就会白屏)
+// 	if (start_lol_handler() != 0) {
+// 		exit(-1);
+// 	}
 }
 
 
@@ -125,13 +132,14 @@ bool ClientApp::Execute(const CefString& name,
 	{
 		if (arguments.size() == 1 && arguments[0]->IsString())
 		{
-			retval = CefV8Value::CreateString(L"return_string");
+			retval = CefV8Value::CreateString(L"cpp return string to js");
 			return true;
 		}
 	}
 	else if (name.compare(L"Minimize") == 0)
 	{
-		MessageBox(NULL, L"js call Minimize", L"", NULL);
+		CefRefPtr<CefProcessMessage> objMsg = CefProcessMessage::Create(L"Minimize");
+		CefV8Context::GetCurrentContext()->GetBrowser()->SendProcessMessage(PID_BROWSER, objMsg);
 		return true;
 	}
  	return false;

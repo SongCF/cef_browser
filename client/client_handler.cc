@@ -48,6 +48,10 @@ bool ClientHandler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 		MessageBox(hwnd, msg.c_str(), L"", MB_OK);
 		return true;
 	}
+	else if (message->GetName() == L"Minimize") {
+		browser->GetMainFrame()->ExecuteJavaScript(L"alert(\"[js call Minimize] cpp call ExecuteJavaScript\");", L"", 0);
+		return true;
+	}
 	return false;
 }
 

@@ -16,7 +16,7 @@ int start_lol_handler()
 	HMODULE hModule = LoadLibrary(L"LolDataHelper.dll");
 	if (hModule == NULL)
 	{
-		MessageBox(NULL, L"load LolDataHelper.dll failed", L"Error", NULL);
+		MessageBox(NULL, L"load LolDataHelper.dll failed", L"Error", MB_OK);
 		return -1;
 	}
 
