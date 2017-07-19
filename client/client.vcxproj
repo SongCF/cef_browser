@@ -19,16 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cefsimple_win.cc" />
+    <ClCompile Include="main.cc" />
+    <ClCompile Include="client_app.cc" />
+    <ClCompile Include="client_handler.cc" />
     <ClCompile Include="lol_handler.cpp" />
-    <ClCompile Include="simple_app.cc" />
-    <ClCompile Include="simple_handler.cc" />
-    <ClCompile Include="simple_handler_win.cc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="client_app.h" />
+    <ClInclude Include="client_handler.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="simple_app.h" />
-    <ClInclude Include="simple_handler.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FD8F2A2C-DD51-41EC-8BA0-1A98D99F511F}</ProjectGuid>

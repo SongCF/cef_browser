@@ -2,7 +2,7 @@
 // reserved. Use of this source code is governed by a BSD-style license that
 // can be found in the LICENSE file.
 
-#include "simple_handler.h"
+#include "client_handler.h"
 
 #include <sstream>
 #include <string>
@@ -14,33 +14,63 @@
 
 namespace {
 
-SimpleHandler* g_instance = NULL;
+ClientHandler* g_instance = NULL;
 
 }  // namespace
 
-SimpleHandler::SimpleHandler()
+ClientHandler::ClientHandler()
     : is_closing_(false) {
   DCHECK(!g_instance);
   g_instance = this;
 }
 
-SimpleHandler::~SimpleHandler() {
+ClientHandler::~ClientHandler() {
   g_instance = NULL;
 }
 
 // static
-SimpleHandler* SimpleHandler::GetInstance() {
+ClientHandler* ClientHandler::GetInstance() {
   return g_instance;
 }
 
-void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
+
+//browser process handle msg
+bool ClientHandler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
+	CefProcessId source_process,
+	CefRefPtr<CefProcessMessage> message) 
+{
+	CEF_REQUIRE_UI_THREAD();
+	if (message->GetName() == L"MessageBox")
+	{
+		CefRefPtr<CefListValue> argList = message->GetArgumentList();
+		CefString msg = argList->GetString(0);
+		CefWindowHandle hwnd = browser->GetHost()->GetWindowHandle();
+		MessageBox(hwnd, msg.c_str(), L"", MB_OK);
+		return true;
+	}
+	return false;
+}
+
+
+
+void ClientHandler::OnTitleChange(CefRefPtr<CefBrowser> browser,
+	const CefString& title) 
+{
+// 	CEF_REQUIRE_UI_THREAD();
+// 
+// 	CefWindowHandle hwnd = browser->GetHost()->GetWindowHandle();
+// 	SetWindowText(hwnd, std::wstring(title).c_str());
+}
+
+
+void ClientHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
   CEF_REQUIRE_UI_THREAD();
 
   // Add to the list of existing browsers.
   browser_list_.push_back(browser);
 }
 
-bool SimpleHandler::DoClose(CefRefPtr<CefBrowser> browser) {
+bool ClientHandler::DoClose(CefRefPtr<CefBrowser> browser) {
   CEF_REQUIRE_UI_THREAD();
 
   // Closing the main window requires special handling. See the DoClose()
@@ -56,7 +86,7 @@ bool SimpleHandler::DoClose(CefRefPtr<CefBrowser> browser) {
   return false;
 }
 
-void SimpleHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
+void ClientHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
   CEF_REQUIRE_UI_THREAD();
 
   // Remove from the list of existing browsers.
@@ -74,7 +104,7 @@ void SimpleHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
   }
 }
 
-void SimpleHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
+void ClientHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
                                 CefRefPtr<CefFrame> frame,
                                 ErrorCode errorCode,
                                 const CefString& errorText,
@@ -94,11 +124,11 @@ void SimpleHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
   frame->LoadString(ss.str(), failedUrl);
 }
 
-void SimpleHandler::CloseAllBrowsers(bool force_close) {
+void ClientHandler::CloseAllBrowsers(bool force_close) {
   if (!CefCurrentlyOn(TID_UI)) {
     // Execute on the UI thread.
     CefPostTask(TID_UI,
-        base::Bind(&SimpleHandler::CloseAllBrowsers, this, force_close));
+        base::Bind(&ClientHandler::CloseAllBrowsers, this, force_close));
     return;
   }
 
