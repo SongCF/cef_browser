@@ -2,11 +2,11 @@
 // reserved. Use of this source code is governed by a BSD-style license that
 // can be found in the LICENSE file.
 
-#include "cefsimple/simple_app.h"
+#include "simple_app.h"
 
 #include <string>
 
-#include "cefsimple/simple_handler.h"
+#include "simple_handler.h"
 #include "include/cef_browser.h"
 #include "include/cef_command_line.h"
 #include "include/wrapper/cef_helpers.h"
@@ -23,7 +23,7 @@ void SimpleApp::OnContextInitialized() {
 #if defined(OS_WIN)
   // On Windows we need to specify certain flags that will be passed to
   // CreateWindowEx().
-  window_info.SetAsPopup(NULL, "cefsimple");
+  window_info.SetAsPopup(NULL, L"ÆÙ²¼µç¾º");
 #endif
 
   // SimpleHandler implements browser-level callbacks.
