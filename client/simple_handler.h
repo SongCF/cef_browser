@@ -2,22 +2,23 @@
 // reserved. Use of this source code is governed by a BSD-style license that
 // can be found in the LICENSE file.
 
-#pragma once
+#ifndef CEF_TESTS_CEFSIMPLE_SIMPLE_HANDLER_H_
+#define CEF_TESTS_CEFSIMPLE_SIMPLE_HANDLER_H_
 
 #include "include/cef_client.h"
 
 #include <list>
 
-class ClientHandler : public CefClient,
+class SimpleHandler : public CefClient,
                       public CefDisplayHandler,
                       public CefLifeSpanHandler,
                       public CefLoadHandler {
  public:
-  ClientHandler();
-  ~ClientHandler();
+  SimpleHandler();
+  ~SimpleHandler();
 
   // Provide access to the single global instance of this object.
-  static ClientHandler* GetInstance();
+  static SimpleHandler* GetInstance();
 
   // CefClient methods:
   virtual CefRefPtr<CefDisplayHandler> GetDisplayHandler() OVERRIDE {
@@ -29,9 +30,6 @@ class ClientHandler : public CefClient,
   virtual CefRefPtr<CefLoadHandler> GetLoadHandler() OVERRIDE {
     return this;
   }
-  virtual bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
-	  CefProcessId source_process,
-	  CefRefPtr<CefProcessMessage> message) OVERRIDE;
 
   // CefDisplayHandler methods:
   virtual void OnTitleChange(CefRefPtr<CefBrowser> browser,
@@ -62,6 +60,7 @@ class ClientHandler : public CefClient,
   bool is_closing_;
 
   // Include the default reference counting implementation.
-  IMPLEMENT_REFCOUNTING(ClientHandler);
+  IMPLEMENT_REFCOUNTING(SimpleHandler);
 };
 
+#endif  // CEF_TESTS_CEFSIMPLE_SIMPLE_HANDLER_H_

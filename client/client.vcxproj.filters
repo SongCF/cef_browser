@@ -11,27 +11,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="lol_handler.cpp">
+    <ClCompile Include="cefsimple_win.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="client_app.cc">
+    <ClCompile Include="simple_app.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="client_handler.cc">
+    <ClCompile Include="simple_handler.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="main.cc">
+    <ClCompile Include="simple_handler_win.cc">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="client_app.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="client_handler.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="simple_app.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="simple_handler.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

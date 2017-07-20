@@ -4,7 +4,7 @@
 
 #include <windows.h>
 
-#include "client_app.h"
+#include "cefsimple/simple_app.h"
 #include "include/cef_sandbox_win.h"
 
 
@@ -43,7 +43,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
   // SimpleApp implements application-level callbacks. It will create the first
   // browser instance in OnContextInitialized() after CEF has initialized.
-  CefRefPtr<ClientApp> app(new ClientApp);
+  CefRefPtr<SimpleApp> app(new SimpleApp);
 
   // CEF applications have multiple sub-processes (render, plugin, GPU, etc)
   // that share the same executable. This function checks the command-line and,
