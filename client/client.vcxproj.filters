@@ -34,5 +34,13 @@
     <ClInclude Include="resource.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="func.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="cefsimple.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

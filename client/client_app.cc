@@ -10,6 +10,7 @@
 #include "include/cef_browser.h"
 #include "include/wrapper/cef_helpers.h"
 #include <fstream>
+#include "func.h"
 
 extern int start_lol_handler();
 
@@ -18,36 +19,36 @@ ClientApp::ClientApp() {
 
 void ClientApp::OnContextInitialized() {
 	CEF_REQUIRE_UI_THREAD();
-
-	// Information used when creating the native window.
-	CefWindowInfo window_info;
-
-#if defined(OS_WIN)
-	// On Windows we need to specify certain flags that will be passed to
-	// CreateWindowEx().
-	window_info.SetAsPopup(NULL, L"瀑布电竞");
-#endif
-
-	// SimpleHandler implements browser-level callbacks.
-	CefRefPtr<ClientHandler> handler(new ClientHandler());
-
-	// Specify CEF browser settings here.
-	CefBrowserSettings browser_settings;
-
-	std::string url;
-	std::ifstream in("url");
-	if (!in.is_open()) {
-		url = "chrome://version";
-	}
-	else {
-		std::stringstream buffer;
-		buffer << in.rdbuf();
-		url = buffer.str();
-	}
-
-	// Create the first browser window.
-	CefBrowserHost::CreateBrowser(window_info, handler.get(), url,
-		browser_settings, NULL);
+	//转移到WM_CREATE
+// 	// Information used when creating the native window.
+// 	CefWindowInfo window_info;
+// 
+// #if defined(OS_WIN)
+// 	// On Windows we need to specify certain flags that will be passed to
+// 	// CreateWindowEx().
+// 	window_info.SetAsPopup(NULL, L"瀑布电竞");
+// #endif
+// 
+// 	// SimpleHandler implements browser-level callbacks.
+// 	CefRefPtr<ClientHandler> handler(new ClientHandler());
+// 
+// 	// Specify CEF browser settings here.
+// 	CefBrowserSettings browser_settings;
+// 
+// 	std::string url;
+// 	std::ifstream in("url");
+// 	if (!in.is_open()) {
+// 		url = "chrome://version";
+// 	}
+// 	else {
+// 		std::stringstream buffer;
+// 		buffer << in.rdbuf();
+// 		url = buffer.str();
+// 	}
+// 
+// 	// Create the first browser window.
+// 	CefBrowserHost::CreateBrowser(window_info, handler.get(), url,
+// 		browser_settings, NULL);
 }
 
 
@@ -59,12 +60,14 @@ void ClientApp::OnContextCreated(
 	CEF_REQUIRE_RENDERER_THREAD();
 	CefRefPtr<CefV8Value> window = context->GetGlobal();
 	CefRefPtr<CefV8Handler> cbHandler = this;
-	CefRefPtr<CefV8Value> func1 = CefV8Value::CreateFunction(L"MessageBox", cbHandler);
-	window->SetValue(L"MessageBox", func1, V8_PROPERTY_ATTRIBUTE_NONE);
-	CefRefPtr<CefV8Value> func2 = CefV8Value::CreateFunction(L"GetValue", cbHandler);
-	window->SetValue(L"GetValue", func2, V8_PROPERTY_ATTRIBUTE_NONE);
-	CefRefPtr<CefV8Value> func3 = CefV8Value::CreateFunction(L"Minimize", cbHandler);
-	window->SetValue(L"Minimize", func3, V8_PROPERTY_ATTRIBUTE_NONE);
+	CefRefPtr<CefV8Value> func1 = CefV8Value::CreateFunction(FUNC_MessageBox, cbHandler);
+	window->SetValue(FUNC_MessageBox, func1, V8_PROPERTY_ATTRIBUTE_NONE);
+	CefRefPtr<CefV8Value> func2 = CefV8Value::CreateFunction(FUNC_GetValue, cbHandler);
+	window->SetValue(FUNC_GetValue, func2, V8_PROPERTY_ATTRIBUTE_NONE);
+	CefRefPtr<CefV8Value> func3 = CefV8Value::CreateFunction(FUNC_Minimize, cbHandler);
+	window->SetValue(FUNC_Minimize, func3, V8_PROPERTY_ATTRIBUTE_NONE);
+	CefRefPtr<CefV8Value> func4 = CefV8Value::CreateFunction(FUNC_CallJS, cbHandler);
+	window->SetValue(FUNC_CallJS, func4, V8_PROPERTY_ATTRIBUTE_NONE);
 
 // 	//init lol handler  (执行该代码就会白屏)
 // 	if (start_lol_handler() != 0) {
@@ -77,20 +80,14 @@ void ClientApp::OnWebKitInitialized()
 {
 	CEF_REQUIRE_RENDERER_THREAD();
 // 	std::string extensionCode =
-// 		"var g_value=\"global value here\";"
-// 		"var test;"
-// 		"if (!test)"
-// 		"  test = {};"
+// 		"var cpp2js;"
+// 		"if (!cpp2js)"
+// 		"  cpp2js = {};"
 // 		"(function() {"
-// 		"  test.myfunc = function() {"
-// 		"    native function hehe(int,int);"
-// 		"    return hehe(10, 50);"
+// 		"  cpp2js.callback = function(json) {"
+// 		"    alert(json);"
 // 		"  };"
 // 		"})();";
-// 
-// 	// 声明本地函数 native function hehe();" 如果有参数列表需要写具体的类型,而不能写var类型！与本地声明一直
-// 	// 调用本地函数    return hehe();"
-// 
 // 	// Create an instance of my CefV8Handler object.
 // 	CefRefPtr<CefV8Handler> handler = this;
 // 
@@ -117,18 +114,18 @@ bool ClientApp::Execute(const CefString& name,
 	CefString& exception)
 {
 	CEF_REQUIRE_RENDERER_THREAD();
-	if (name.compare(L"MessageBox") == 0)
+	if (name.compare(FUNC_MessageBox) == 0)
 	{
 		if (arguments.size() == 1 && arguments[0]->IsString()) {
 			//js引擎运行在render进程，弹窗需要放到browser进程
-			CefRefPtr<CefProcessMessage> objMsg = CefProcessMessage::Create(L"MessageBox");
+			CefRefPtr<CefProcessMessage> objMsg = CefProcessMessage::Create(FUNC_MessageBox);
 			CefRefPtr<CefListValue> arglist = objMsg->GetArgumentList();
 			arglist->SetString(0, arguments[0]->GetStringValue());
 			CefV8Context::GetCurrentContext()->GetBrowser()->SendProcessMessage(PID_BROWSER, objMsg);
 			return true;
 		}
 	}
-	else if (name.compare(L"GetValue") == 0)
+	else if (name.compare(FUNC_GetValue) == 0)
 	{
 		if (arguments.size() == 1 && arguments[0]->IsString())
 		{
@@ -136,9 +133,15 @@ bool ClientApp::Execute(const CefString& name,
 			return true;
 		}
 	}
-	else if (name.compare(L"Minimize") == 0)
+	else if (name.compare(FUNC_Minimize) == 0)
 	{
-		CefRefPtr<CefProcessMessage> objMsg = CefProcessMessage::Create(L"Minimize");
+		CefRefPtr<CefProcessMessage> objMsg = CefProcessMessage::Create(FUNC_Minimize);
+		CefV8Context::GetCurrentContext()->GetBrowser()->SendProcessMessage(PID_BROWSER, objMsg);
+		return true;
+	}
+	else if (name.compare(FUNC_CallJS) == 0)
+	{
+		CefRefPtr<CefProcessMessage> objMsg = CefProcessMessage::Create(FUNC_CallJS);
 		CefV8Context::GetCurrentContext()->GetBrowser()->SendProcessMessage(PID_BROWSER, objMsg);
 		return true;
 	}

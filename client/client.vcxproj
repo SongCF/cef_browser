@@ -27,7 +27,11 @@
   <ItemGroup>
     <ClInclude Include="client_app.h" />
     <ClInclude Include="client_handler.h" />
+    <ClInclude Include="func.h" />
     <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="cefsimple.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FD8F2A2C-DD51-41EC-8BA0-1A98D99F511F}</ProjectGuid>

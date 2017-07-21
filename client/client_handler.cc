@@ -11,6 +11,10 @@
 #include "include/cef_app.h"
 #include "include/wrapper/cef_closure_task.h"
 #include "include/wrapper/cef_helpers.h"
+#include "func.h"
+
+
+extern void HideWindow();
 
 namespace {
 
@@ -40,7 +44,7 @@ bool ClientHandler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 	CefRefPtr<CefProcessMessage> message) 
 {
 	CEF_REQUIRE_UI_THREAD();
-	if (message->GetName() == L"MessageBox")
+	if (message->GetName() == FUNC_MessageBox)
 	{
 		CefRefPtr<CefListValue> argList = message->GetArgumentList();
 		CefString msg = argList->GetString(0);
@@ -48,8 +52,13 @@ bool ClientHandler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 		MessageBox(hwnd, msg.c_str(), L"", MB_OK);
 		return true;
 	}
-	else if (message->GetName() == L"Minimize") {
-		browser->GetMainFrame()->ExecuteJavaScript(L"alert(\"[js call Minimize] cpp call ExecuteJavaScript\");", L"", 0);
+	else if (message->GetName() == FUNC_Minimize) {
+		HideWindow();
+		return true;
+	}
+	else if (message->GetName() == FUNC_CallJS) {
+		//TODO 
+		//browser->GetMainFrame()->ExecuteJavaScript(L"cpp2js.callback(\"test callback msg\");", L"", 0);
 		return true;
 	}
 	return false;
