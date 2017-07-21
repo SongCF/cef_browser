@@ -38,7 +38,7 @@ HINSTANCE g_instance = NULL;
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-void AddTrayIcon();
+void TrayIconVisible(bool b);
 
 
 
@@ -204,10 +204,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			url = buffer.str();
 		}
 		CefBrowserHost::CreateBrowser(window_info, handler.get(), url, browser_settings, NULL);
-		AddTrayIcon();
+		TrayIconVisible(true);
 		break;
 	}
 	case WM_DESTROY:
+		TrayIconVisible(false);
 		PostQuitMessage(0);
 		break;
 	case WM_CLOSE:
@@ -246,7 +247,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 //托盘
-void AddTrayIcon()
+void TrayIconVisible(bool b)
 {
 	NOTIFYICONDATA nid;
 	nid.cbSize = (DWORD)sizeof(NOTIFYICONDATA);
@@ -256,7 +257,7 @@ void AddTrayIcon()
 	nid.uCallbackMessage = MSG_TRAY;//自定义的消息名称 
 	nid.hIcon = LoadIcon(g_instance, MAKEINTRESOURCE(IDI_SMALL));
 	wcscpy_s(nid.szTip, TITLE);
-	Shell_NotifyIcon(NIM_ADD, &nid);//在托盘区添加图标 
+	Shell_NotifyIcon(b ? NIM_ADD : NIM_DELETE, &nid);//在托盘区添加图标 
 	//ShowWindow(g_wnd, SW_HIDE);//隐藏主窗口 
 }
 
