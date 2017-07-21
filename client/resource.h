@@ -10,6 +10,8 @@
 #define IDI_CEFSIMPLE                   100
 #define IDI_SMALL                       101
 
+#define TITLE L"ÆÙ²¼µç¾º"
+
 // Avoid files associated with MacOS
 #define _X86_
 

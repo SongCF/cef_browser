@@ -255,7 +255,7 @@ void AddTrayIcon()
 	nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
 	nid.uCallbackMessage = MSG_TRAY;//自定义的消息名称 
 	nid.hIcon = LoadIcon(g_instance, MAKEINTRESOURCE(IDI_SMALL));
-	wcscpy_s(nid.szTip, L"瀑布电竞");
+	wcscpy_s(nid.szTip, TITLE);
 	Shell_NotifyIcon(NIM_ADD, &nid);//在托盘区添加图标 
 	//ShowWindow(g_wnd, SW_HIDE);//隐藏主窗口 
 }
