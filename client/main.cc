@@ -39,6 +39,7 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 void TrayIconVisible(bool b);
+extern int start_lol_handler();
 
 
 
@@ -49,7 +50,9 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
                       LPTSTR    lpCmdLine,
                       int       nCmdShow) {
   UNREFERENCED_PARAMETER(hPrevInstance);
-  UNREFERENCED_PARAMETER(lpCmdLine);
+  UNREFERENCED_PARAMETER(lpCmdLine); 
+  
+  //start_lol_handler();
 
   g_instance = hInstance;
 
@@ -80,7 +83,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 
   // Specify CEF global settings here.
   CefSettings settings;
-  settings.single_process = true;
+  //settings.single_process = true;
 
 #if !defined(CEF_USE_SANDBOX)
   settings.no_sandbox = true;

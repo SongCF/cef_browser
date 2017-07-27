@@ -5,8 +5,8 @@
 //回调函数,用于接收采集器抓到的数据
 void _stdcall ReceiveMessage(char *args)
 {
-	std::string message = args;
-	std::cout << message << std::endl;
+	//std::string message = args;
+	//std::cout << message << std::endl;
 }
 
 typedef void(*pMain)(DWORD procAddress);

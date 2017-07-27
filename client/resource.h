@@ -9,6 +9,8 @@
 
 #define IDI_CEFSIMPLE                   100
 #define IDI_SMALL                       101
+// IDI_CEFSIMPLE           ICON                    "res\cefsimple.ico"
+// IDI_SMALL               ICON                    "res\small.ico"
 
 #define TITLE L"ÆÙ²¼µç¾º"
 

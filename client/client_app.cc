@@ -10,9 +10,9 @@
 #include "include/cef_browser.h"
 #include "include/wrapper/cef_helpers.h"
 #include <fstream>
+#include <thread>
 #include "func.h"
 
-extern int start_lol_handler();
 
 ClientApp::ClientApp() {
 }
@@ -68,11 +68,6 @@ void ClientApp::OnContextCreated(
 	window->SetValue(FUNC_Minimize, func3, V8_PROPERTY_ATTRIBUTE_NONE);
 	CefRefPtr<CefV8Value> func4 = CefV8Value::CreateFunction(FUNC_CallJS, cbHandler);
 	window->SetValue(FUNC_CallJS, func4, V8_PROPERTY_ATTRIBUTE_NONE);
-
-// 	//init lol handler  (执行该代码就会白屏)
-// 	if (start_lol_handler() != 0) {
-// 		exit(-1);
-// 	}
 }
 
 
